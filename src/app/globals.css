@@ -1,26 +1,258 @@
 @import "tailwindcss";
 
+/* next-themes toggles the `dark` class on <html> */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------- Design tokens ---------- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #fafafa;
+  --surface: rgb(255 255 255 / 0.7);
+  --surface-solid: #ffffff;
+  --border: #e4e4e7;
+  --fg: #09090b;
+  --muted: #52525b;
+  --subtle: #71717a;
+  --accent-from: #4f46e5; /* indigo-600 */
+  --accent-to: #0891b2; /* cyan-600 */
+  --ring: #4f46e5;
+  --glow: rgb(79 70 229 / 0.12);
+  --glow-strong: rgb(79 70 229 / 0.16);
+  /* macOS-style wallpaper */
+  --wallpaper:
+    radial-gradient(at 12% 8%, #c7d2fe 0, transparent 50%),
+    radial-gradient(at 88% 14%, #a5f3fc 0, transparent 46%),
+    radial-gradient(at 78% 88%, #fbcfe8 0, transparent 50%),
+    radial-gradient(at 8% 92%, #ddd6fe 0, transparent 46%);
+}
+
+.dark {
+  --bg: #09090b;
+  --surface: rgb(24 24 27 / 0.6);
+  --surface-solid: #18181b;
+  --border: #27272a;
+  --fg: #fafafa;
+  --muted: #a1a1aa;
+  --subtle: #8b8b94;
+  --accent-from: #818cf8; /* indigo-400 */
+  --accent-to: #22d3ee; /* cyan-400 */
+  --ring: #818cf8;
+  --glow: rgb(129 140 248 / 0.16);
+  --glow-strong: rgb(129 140 248 / 0.2);
+  --wallpaper:
+    radial-gradient(at 12% 8%, rgb(67 56 202 / 0.55) 0, transparent 50%),
+    radial-gradient(at 88% 14%, rgb(14 116 144 / 0.45) 0, transparent 46%),
+    radial-gradient(at 78% 88%, rgb(162 28 175 / 0.35) 0, transparent 50%),
+    radial-gradient(at 8% 92%, rgb(30 64 175 / 0.45) 0, transparent 46%);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-solid: var(--surface-solid);
+  --color-border: var(--border);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-accent-from: var(--accent-from);
+  --color-accent-to: var(--accent-to);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ---------- Base ---------- */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 3.5rem;
+}
+
+/* Lenis smooth-scroll integration */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Fixed desktop wallpaper behind everything */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: var(--wallpaper);
+  pointer-events: none;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent-from) 30%, transparent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ---------- Keyframes ---------- */
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes aurora-a {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(12%, 14%) scale(1.2); }
+}
+@keyframes aurora-b {
+  0%, 100% { transform: translate(0, 0) scale(1.1); }
+  50% { transform: translate(-14%, 10%) scale(0.9); }
+}
+@keyframes aurora-c {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-8%, -12%) scale(1.25); }
+}
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+@keyframes shimmer {
+  to { background-position: 200% center; }
+}
+@keyframes spin-angle {
+  to { --angle: 360deg; }
+}
+@keyframes flow-x {
+  0% { left: 0; opacity: 0; }
+  15%, 85% { opacity: 1; }
+  100% { left: calc(100% - 6px); opacity: 0; }
+}
+@keyframes flow-y {
+  0% { top: 0; opacity: 0; }
+  15%, 85% { opacity: 1; }
+  100% { top: calc(100% - 6px); opacity: 0; }
+}
+@keyframes wave {
+  0%, 60%, 100% { transform: rotate(0deg); }
+  10%, 30% { transform: rotate(14deg); }
+  20%, 40% { transform: rotate(-8deg); }
+  50% { transform: rotate(10deg); }
+}
+@keyframes caret {
+  50% { opacity: 0; }
+}
+
+.animate-aurora-a { animation: aurora-a 18s ease-in-out infinite; }
+.animate-aurora-b { animation: aurora-b 22s ease-in-out infinite; }
+.animate-aurora-c { animation: aurora-c 26s ease-in-out infinite; }
+.animate-float-y { animation: float-y 6s ease-in-out infinite; }
+.animate-marquee { animation: marquee 40s linear infinite; }
+.animate-flow-x { animation: flow-x 2.2s ease-in-out infinite; }
+.animate-flow-y { animation: flow-y 2.2s ease-in-out infinite; }
+.animate-caret { animation: caret 1s step-end infinite; }
+.animate-shimmer {
+  background-size: 200% auto;
+  animation: shimmer 6s linear infinite;
+}
+
+/* Rotating gradient border (conic) */
+.animated-border {
+  position: relative;
+}
+.animated-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--angle),
+    transparent 0 55%,
+    var(--accent-from),
+    var(--accent-to),
+    transparent 100%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  /* Only animate while hovered: a permanently repainting conic border is costly */
+  animation: spin-angle 7s linear infinite paused;
+  pointer-events: none;
+}
+.animated-border:hover::before {
+  animation-play-state: running;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------- Reusable utilities ---------- */
+@utility text-gradient {
+  background-image: linear-gradient(
+    110deg,
+    var(--accent-from),
+    var(--accent-to)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Cheap card surface: no backdrop-filter (cards sit on an already-blurred window) */
+@utility panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+@utility bg-gradient-accent {
+  background-image: linear-gradient(
+    110deg,
+    var(--accent-from),
+    var(--accent-to)
+  );
+}
+
+@utility glass {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+@utility bg-grid {
+  background-image:
+    linear-gradient(to right, var(--border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(
+    ellipse 70% 60% at 50% 0%,
+    #000 30%,
+    transparent 75%
+  );
 }
