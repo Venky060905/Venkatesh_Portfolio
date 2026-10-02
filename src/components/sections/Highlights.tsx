@@ -41,7 +41,7 @@ export function Highlights() {
           {stats.map((s, i) => (
             <Reveal key={s.label} delay={i * 0.08}>
               <div className="panel rounded-2xl p-6 text-center">
-                <dd className="text-gradient animate-shimmer text-5xl font-semibold tracking-tight">
+                <dd className="text-gradient text-5xl font-semibold tracking-tight">
                   <CountUp to={s.value} />
                 </dd>
                 <dt className="mt-2 font-medium text-fg">{s.label}</dt>

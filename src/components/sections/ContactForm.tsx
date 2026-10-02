@@ -41,6 +41,7 @@ export function ContactForm() {
   const [honeypot, setHoneypot] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [cooldown, setCooldown] = useState(0);
+  const [errorReason, setErrorReason] = useState("");
 
   // Count down the anti-spam cooldown after a successful send
   useEffect(() => {
@@ -95,7 +96,13 @@ export function ContactForm() {
       setTouched({});
       setErrors({});
       setCooldown(COOLDOWN_S);
-    } catch {
+    } catch (err) {
+      // EmailJS rejects with an object exposing { status, text }, which doesn't
+      // serialise in the console, so pull the fields out explicitly.
+      const { status: code, text } = (err ?? {}) as { status?: number; text?: string };
+      const reason = `${code ?? "network"}: ${text ?? String(err)}`;
+      console.warn(`EmailJS send failed (${reason})`);
+      setErrorReason(reason);
       setStatus("error");
     }
   }
@@ -269,11 +276,20 @@ export function ContactForm() {
                       {status === "error"
                         ? "Couldn't send your message. "
                         : "The form isn't connected yet. "}
-                      Please email{" "}
-                      <a className="underline" href={`mailto:${profile.email}`}>
-                        {profile.email}
-                      </a>
-                      .
+                      <a
+                        className="underline"
+                        href={`mailto:${profile.email}?subject=${encodeURIComponent(
+                          `Portfolio message from ${values.name.trim() || "a visitor"}`,
+                        )}&body=${encodeURIComponent(values.message.trim())}`}
+                      >
+                        Send it from your email app instead
+                      </a>{" "}
+                      or write to {profile.email}.
+                      {process.env.NODE_ENV !== "production" && errorReason && (
+                        <span className="mt-1 block font-mono text-xs opacity-80">
+                          Dev info: {errorReason}
+                        </span>
+                      )}
                     </span>
                   </motion.p>
                 )}

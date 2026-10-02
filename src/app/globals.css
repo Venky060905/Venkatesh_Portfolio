@@ -6,7 +6,7 @@
 /* ---------- Design tokens ---------- */
 :root {
   --bg: #fafafa;
-  --surface: rgb(255 255 255 / 0.7);
+  --surface: rgb(255 255 255 / 0.78);
   --surface-solid: #ffffff;
   --border: #e4e4e7;
   --fg: #09090b;
@@ -27,7 +27,7 @@
 
 .dark {
   --bg: #09090b;
-  --surface: rgb(24 24 27 / 0.6);
+  --surface: rgb(24 24 27 / 0.78);
   --surface-solid: #18181b;
   --border: #27272a;
   --fg: #fafafa;
@@ -63,18 +63,6 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 3.5rem;
-}
-
-/* Lenis smooth-scroll integration */
-html.lenis,
-html.lenis body {
-  height: auto;
-}
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-.lenis.lenis-stopped {
-  overflow: hidden;
 }
 
 /* Fixed desktop wallpaper behind everything */
@@ -191,12 +179,8 @@ body {
     linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
-  /* Only animate while hovered: a permanently repainting conic border is costly */
-  animation: spin-angle 7s linear infinite paused;
+  /* Static ring: an animated conic mask repaints the whole card every frame */
   pointer-events: none;
-}
-.animated-border:hover::before {
-  animation-play-state: running;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -240,8 +224,6 @@ body {
 @utility glass {
   background: var(--surface);
   border: 1px solid var(--border);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
 }
 
 @utility bg-grid {

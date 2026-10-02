@@ -27,7 +27,7 @@ export function MenuBar() {
     d?.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }).replace(",", "") ?? "";
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 h-8 border-b border-border bg-surface backdrop-blur-xl">
+    <header className="fixed inset-x-0 top-0 z-50 h-8 border-b border-border bg-surface-solid/90">
       <div className="mx-auto flex h-full w-full max-w-[1600px] items-center justify-between px-3 text-[13px] sm:px-4">
         <div className="flex items-center gap-1">
           <a

@@ -1,9 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
-import { CursorGlow } from "@/components/ui/CursorGlow";
 import { ScrollProgress } from "@/components/ui/ScrollProgress";
-import { SmoothScroll } from "@/components/ui/SmoothScroll";
 import { profile, siteUrl } from "@/data/profile";
 import "./globals.css";
 
@@ -68,9 +66,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           Skip to content
         </a>
         <ThemeProvider>
-          <SmoothScroll />
           <ScrollProgress />
-          <CursorGlow />
           {children}
         </ThemeProvider>
       </body>

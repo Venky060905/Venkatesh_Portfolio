@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import { cn } from "@/lib/utils";
 
 type Props = React.ComponentProps<"div"> & { as?: "div" | "article" };
@@ -11,10 +12,19 @@ export function SpotlightCard({
   children,
   ...props
 }: Props) {
+  const frame = useRef(0);
+
+  // Coalesce to one update per animation frame
   function onMove(e: React.MouseEvent<HTMLElement>) {
-    const r = e.currentTarget.getBoundingClientRect();
-    e.currentTarget.style.setProperty("--mx", `${e.clientX - r.left}px`);
-    e.currentTarget.style.setProperty("--my", `${e.clientY - r.top}px`);
+    const el = e.currentTarget;
+    const { clientX, clientY } = e;
+    if (frame.current) return;
+    frame.current = requestAnimationFrame(() => {
+      frame.current = 0;
+      const r = el.getBoundingClientRect();
+      el.style.setProperty("--mx", `${clientX - r.left}px`);
+      el.style.setProperty("--my", `${clientY - r.top}px`);
+    });
   }
 
   return (

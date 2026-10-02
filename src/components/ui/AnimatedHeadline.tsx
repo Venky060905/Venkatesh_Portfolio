@@ -33,7 +33,7 @@ export function AnimatedHeadline({
                   <motion.span
                     className={cn(
                       "inline-block",
-                      seg.gradient && "text-gradient animate-shimmer",
+                      seg.gradient && "text-gradient",
                     )}
                     initial={reduce ? false : { y: "115%" }}
                     animate={{ y: 0 }}

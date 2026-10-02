@@ -67,8 +67,9 @@ function DockIcon({
     const b = ref.current?.getBoundingClientRect();
     return b ? x - b.x - b.width / 2 : Infinity;
   });
-  const size = useSpring(
-    useTransform(distance, [-140, 0, 140], [BASE, reduce ? BASE : PEAK, BASE]),
+  // Scale (compositor-only) instead of width/height, which would re-layout every frame
+  const scale = useSpring(
+    useTransform(distance, [-140, 0, 140], [1, reduce ? 1 : PEAK / BASE, 1]),
     { mass: 0.1, stiffness: 170, damping: 14 },
   );
   const Icon = item.icon;
@@ -78,7 +79,7 @@ function DockIcon({
       <motion.a
         ref={ref}
         href={item.href}
-        style={{ width: size, height: size }}
+        style={{ width: BASE, height: BASE, scale, transformOrigin: "50% 100%" }}
         aria-label={item.label}
         aria-current={active ? "location" : undefined}
         {...(item.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
@@ -90,7 +91,7 @@ function DockIcon({
         <Icon className="size-1/2" aria-hidden="true" />
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute -top-9 whitespace-nowrap rounded-md border border-border bg-surface-solid/90 px-2.5 py-1 text-xs font-medium text-fg opacity-0 shadow-md backdrop-blur-xl transition-opacity group-hover:opacity-100"
+          className="pointer-events-none absolute -top-9 whitespace-nowrap rounded-md border border-border bg-surface-solid/90 px-2.5 py-1 text-xs font-medium text-fg opacity-0 shadow-md transition-opacity group-hover:opacity-100"
         >
           {item.label}
         </span>
@@ -124,7 +125,7 @@ export function Dock() {
         initial={reduce ? false : { y: 90, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ type: "spring", stiffness: 180, damping: 20, delay: 0.6 }}
-        className="pointer-events-auto flex items-end gap-1.5 rounded-[1.4rem] border border-border bg-surface px-2.5 pb-1.5 pt-2 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.45)] backdrop-blur-xl"
+        className="pointer-events-auto flex items-end gap-1.5 rounded-[1.4rem] border border-border bg-surface-solid/90 px-2.5 pb-1.5 pt-2 shadow-[0_14px_36px_-14px_rgba(0,0,0,0.45)]"
       >
         {items.map((it) => (
           <DockIcon key={it.id} item={it} active={current === it.id} mouseX={mouseX} reduce={reduce} />

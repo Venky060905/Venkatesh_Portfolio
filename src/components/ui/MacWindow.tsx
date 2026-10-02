@@ -18,7 +18,7 @@ export function MacWindow({ title, url, children, className, bodyClassName }: Pr
       role="group"
       aria-label={title}
       className={cn(
-        "relative overflow-hidden rounded-xl border border-border bg-surface shadow-[0_24px_70px_-24px_rgba(0,0,0,0.35)] backdrop-blur-lg",
+        "relative overflow-hidden rounded-xl border border-border bg-surface shadow-[0_24px_60px_-28px_rgba(0,0,0,0.35)]",
         className,
       )}
     >

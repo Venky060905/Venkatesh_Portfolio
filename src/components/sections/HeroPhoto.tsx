@@ -49,7 +49,7 @@ export function HeroPhoto() {
       }}
     >
       <motion.div
-        style={reduce ? undefined : { rotateX, rotateY, transformStyle: "preserve-3d" }}
+        style={reduce ? undefined : { rotateX, rotateY }}
         className="relative"
       >
         <div
@@ -72,7 +72,7 @@ export function HeroPhoto() {
           <span
             key={c.label}
             aria-hidden="true"
-            style={{ animationDelay: c.delay, transform: "translateZ(40px)" }}
+            style={{ animationDelay: c.delay }}
             className={`panel bg-surface-solid animate-float-y absolute hidden rounded-full px-3 py-1.5 font-mono text-xs text-fg shadow-lg sm:block ${c.className}`}
           >
             {c.label}
